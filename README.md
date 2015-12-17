@@ -6,6 +6,9 @@ README
 
 Pokemon Battle Demo
 
+This is an extension of the project
+by Scotty at fulltimeprogrammer.com
+
 ************************************
 
 Unzip the zip file.
