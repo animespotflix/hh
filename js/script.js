@@ -12,6 +12,7 @@ var charmander = {
     attack: 103,
     defense: 94,
     speed: 116,
+    special: 101,
     effect: null,
     moves: [{
         name: "Ember",
@@ -61,6 +62,7 @@ var pikachu = {
     attack: 106,
     defense: 81,
     speed: 141,
+    special: 101,
     effect: null,
     moves: [{
         name: "ThunderShock",
@@ -116,12 +118,12 @@ var cpuTurn = {
         var randomMove = Math.floor(Math.random() * 4);
         var currentCPUMove = cpuPokemon.moves[randomMove];
         cpuPokemon.moves[randomMove].pp--;
-        
+
         var setUpCPUField = function() {
-            $("#chat-text").text("What will " + cpuPokemon.name + " do?"); 
+            $("#chat-text").text("What will " + cpuPokemon.name + " do?");
             setTimeout(prepareToAttack, 1000);
         };
-        
+
         var prepareToAttack = function() {
             $("#cpuPoke-img").stop();
             $("#cpuPoke-img").animate({
@@ -131,38 +133,38 @@ var cpuTurn = {
                 top: "+=25",
             }, 200)
             });
-            
+
             getAccuracy();
         };
-        
+
         var getAccuracy = function() {
             var setAccuracy = Math.random();
-                
+
             if(setAccuracy <= currentCPUMove.accuracy) {
                 $("#chat-text").text(cpuPokemon.name + " used " + currentCPUMove.name + "!");
                 getMoveType();
             }
-                
+
             else {
                 $("#chat-text").text(cpuPokemon.name + " used " + currentCPUMove.name + ".\n" + cpuPokemon.name + "'s attack missed!");
                 currentState = playerTurn;
                 setTimeout(loop, 1500);
             }
         };
-        
-        
+
+
         var getMoveType = function () {
             showMoveAnimation();
-            
+
             if(currentCPUMove.attDef == "Attack") {
                 setTimeout(attackingMove, 1500);
             }
-            
+
             else {
-                setTimeout(defensiveMove, 1500);    
+                setTimeout(defensiveMove, 1500);
             }
         };
-        
+
         var showMoveAnimation = function() {
             $("#attack-img").addClass("cpu-attack-img");
             $("#attack-img").removeClass("hide");
@@ -172,11 +174,11 @@ var cpuTurn = {
                 $("#attack-img").fadeIn(100).fadeOut(100);
             }
         };
-        
+
         var attackingMove = function() {
             $("#attack-img").addClass("hide");
             $("#attack-img").removeClass("cpu-attack-img");
-            
+
             var crit = 1;
             var mod;
             var critPerc = cpuPokemon.speed / 512;
@@ -186,27 +188,27 @@ var cpuTurn = {
                 if(rand <= critPerc) {
                     crit = 2;
                 }
-                
+
                 var x = (2 * cpuPokemon.lvl + 10) / 250;
                 var y = cpuPokemon.attack / userPokemon.defense;
                 var z = currentCPUMove.power;
                 mod = crit * (Math.random() * (1 - 0.85) + 0.85);
-                
+
                 damage = Math.floor(mod * ((x * y * z) + 2));
             };
-            
+
             if(!cpuPokemon.effect) {
                 damageFormula();
                 userPokemon.hp -= damage;
-                
+
                 if(crit == 2) {
                     $("#chat-text").text("Critical hit!");
                     console.log("Crit!");
                 }
-                
+
                 console.log(mod + " " + crit + " Pika gave: " + damage + " Charm hp: " + userPokemon.hp + ", pp: " + currentCPUMove.pp);
             }
-            
+
             else {
                 //userPokemon.health -= (currentCPUMove.power) - (currentCPUMove.power * cpuPokemon.effect);
                 userPokemon.hp -= (currentCPUMove.power) * (1 - cpuPokemon.effect);
@@ -215,52 +217,52 @@ var cpuTurn = {
 
             if(userPokemon.hp < 0)
                 userPokemon.hp = 0;
-            
+
             $("#user-health-bar").css("width", userPokemon.hp/userPokemon.base_hp * 100 + "%");
             $("#user-hp").text(userPokemon.hp + " / " + userPokemon.base_hp);
             currentState = playerTurn;
-            
+
             if(crit == 2) {
                 setTimeout(loop, 1500);
             }
-            
+
             else {
                 loop();
             }
         };
-        
+
         var defensiveMove = function() {
             $("#attack-img").addClass("hide");
-            $("#attack-img").removeClass("cpu-attack-img"); 
-            
+            $("#attack-img").removeClass("cpu-attack-img");
+
             userPokemon.effect = currentCPUMove.power;
             currentState = playerTurn;
             loop();
         };
-        
+
         setUpCPUField();
     }
 };
-        
+
 var playerTurn = {
     play: function() {
         var currentUserMove;
-        
+
         var setUpUserField = function() {
             var moveButtons = ["#move1-text", "#move2-text", "#move3-text", "#move4-text"];
-            
+
             $("#user-buttons").removeClass("hide");
             $("#chat-text").text("What will " + userPokemon.name + " do?");
-            
+
             for(var i = moveButtons.length - 1; i >= 0; i--) {
-                $(moveButtons[i]).text(userPokemon.moves[i].name);    
+                $(moveButtons[i]).text(userPokemon.moves[i].name);
             }
         };
-        
+
         var prepareToAttack = function() {
             $("#user-buttons").addClass("hide");
             $("#userPoke-img").stop();
-            
+
             $("#userPoke-img").animate({
                 top: "-=25",
             }, 200, function() {
@@ -268,37 +270,37 @@ var playerTurn = {
                 top: "+=25",
             }, 200)
             });
-            
+
             getAccuracy();
         };
-        
+
         var getAccuracy = function() {
             var setAccuracy = Math.random();
-                
+
             if(setAccuracy <= currentUserMove.accuracy) {
                 $("#chat-text").text(userPokemon.name + " used " + currentUserMove.name + "!");
                 getMoveType();
             }
-                
+
             else {
                 $("#chat-text").text(userPokemon.name + " used " + currentUserMove.name + ".\n" + userPokemon.name + "'s attack missed!");
                 currentState = cpuTurn;
                 setTimeout(loop, 1500);
             }
         };
-        
+
         var getMoveType = function () {
             showMoveAnimation();
-            
+
             if(currentUserMove.attDef == "Attack") {
                 setTimeout(attackingMove, 1500);
             }
-            
+
             else {
-                setTimeout(defensiveMove, 1500);    
+                setTimeout(defensiveMove, 1500);
             }
         };
-        
+
         var showMoveAnimation = function() {
             $("#attack-img").addClass("user-attack-img");
             $("#attack-img").removeClass("hide");
@@ -308,11 +310,11 @@ var playerTurn = {
                 $("#attack-img").fadeIn(100).fadeOut(100);
             }
         };
-        
+
         var attackingMove = function() {
             $("#attack-img").addClass("hide");
             $("#attack-img").removeClass("user-attack-img");
-            
+
             var crit = 1;
             var mod;
             var critPerc = userPokemon.speed / 512;
@@ -322,7 +324,7 @@ var playerTurn = {
                 if(rand <= critPerc) {
                     crit = 2;
                 }
-                
+
                 var x = (2 * userPokemon.lvl + 10) / 250;
                 var y = userPokemon.attack / cpuPokemon.defense;
                 var z = currentUserMove.power;
@@ -330,57 +332,57 @@ var playerTurn = {
 
                 damage = Math.floor(mod * ((x * y * z) + 2));
             };
-            
+
             if(!userPokemon.effect) {
                 damageFormula();
                 cpuPokemon.hp -= damage;
-                
+
                 if(crit == 2) {
                     $("#chat-text").text("Critical hit!");
                     console.log("Crit!");
                 }
-                
+
                 console.log(mod + " " + crit + " Charm gave: " + damage + " Pika hp: " + cpuPokemon.hp + ", pp: " + currentUserMove.pp);
-            }               
-            
+            }
+
             else {
                 //cpuPokemon.health -= (currentUserMove.power) - (currentUserMove.power * userPokemon.effect);
                 cpuPokemon.hp -= (currentUserMove.power) * (1 - userPokemon.effect);
                 userPokemon.effect = null;
             }
-            
+
             if(cpuPokemon.hp < 0)
                 cpuPokemon.hp = 0;
 
             $("#cpu-health-bar").css("width", cpuPokemon.hp/cpuPokemon.base_hp * 100 + "%");
             $("#cpu-hp").text(cpuPokemon.hp + " / " + cpuPokemon.base_hp);
             currentState = cpuTurn;
-            
+
             if(crit == 2) {
                 setTimeout(loop, 1500);
             }
-            
+
             else {
                 loop();
             }
         };
-        
+
         var defensiveMove = function() {
             $("#attack-img").addClass("hide");
-            $("#attack-img").removeClass("user-attack-img"); 
-            
+            $("#attack-img").removeClass("user-attack-img");
+
             cpuPokemon.effect = currentUserMove.power;
             currentState = cpuTurn;
             loop();
         };
-        
+
         $("#move1-button, #move2-button, #move3-button, #move4-button").unbind().click(function() {
             var move = $(this).attr("value");
             currentUserMove = userPokemon.moves[move];
             userPokemon.moves[move].pp--;
             prepareToAttack();
         });
-        
+
         setUpUserField();
     }
 };
@@ -392,20 +394,20 @@ var loop = function() {
         $("#chat-text").text("Foe " + cpuPokemon.name + " fainted!");
         //if enter is pressed
         //$("#chat-text").text("You win!");
-        
+
         document.addEventListener('keydown', function(event) {
             if(event.keyCode == 13) {
                 $("#chat-text").text("You win!");
             }
         });
-    } 
-    
+    }
+
     else if(userPokemon.hp <= 0) {
         //$("#game-over").removeClass("hide");
         //$("#game-over").text("Game Over!\nCPU wins!");
         $("#chat-text").text(userPokemon.name + " fainted!");
     }
-    
+
     else {
         currentState.play();
     }
@@ -417,12 +419,12 @@ var init = function() {
     $("#cpu-name").text(cpuPokemon.name);
     $("#cpu-lvl").text("Lv" + cpuPokemon.lvl);
     $("#cpu-hp").text(cpuPokemon.hp + " / " + cpuPokemon.hp);
-    
+
     userPokemon = charmander;
     $("#user-name").text(userPokemon.name);
     $("#user-lvl").text("Lv" + userPokemon.lvl);
     $("#user-hp").text(userPokemon.hp + " / " + userPokemon.hp);
-    
+
     // FIX THIS TO LOOK AT SPEED STAT
     // If same, it's random
     // Quick Attack has priority 1
