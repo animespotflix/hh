@@ -15,13 +15,13 @@ var charmander = {
     special: 101,
     effect: null,
     moves: [{
-        name: "Ember",
-        type: ["Fire"],
+        name: "Dig",
+        type: ["Ground"],
         attDef: "Attack",
-        power: 40,
+        power: 100,
         accuracy: 1,
         priority: 0,
-        pp: 25
+        pp: 10
     },
     {
         name: "Slash",
@@ -103,21 +103,60 @@ var pikachu = {
 };
 
 var typeEffectiveness = {
-    normal: [1, 1, 1, 1, 1, 0.5, 1, 0, 1, 1, 1, 1, 1, 1, 1],
-    fight: [2, 1, 0.5, 0.5, 1, 2, 0.5, 0, 1, 1, 1, 1, 0.5, 2, 1],
-    flying: [1, 2, 1, 1, 1, 0.5, 2, 1, 1, 1, 2, 0.5, 1, 1, 1],
-    poison: [1, 1, 1, 0.5, 0.5, 0.5, 2, 0.5, 1, 1, 2, 1, 1, 1, 1],
-    ground: [1, 1, 0, 2, 1, 2, 0.5, 1, 2, 1, 0.5, 2, 1, 1, 1],
-    rock: [1, 0.5, 2, 1, 0.5, 1, 2, 1, 2, 1, 1, 1, 1, 2, 1],
-    bug: [1, 0.5, 0.5, 2, 1, 1, 1, 0.5, 0.5, 1, 2, 1, 2, 1, 1],
-    ghost: [0, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 0, 1, 1],
-    fire: [1, 1, 1, 1, 1, 0.5, 2, 1, 0.5, 0.5, 2, 1, 1, 2, 0.5],
-    water: [1, 1, 1, 1, 2, 2, 1, 1, 2, 0.5, 0.5, 1, 1, 1, 0.5],
-    grass: [1, 1, 0.5, 0.5, 2, 2, 0.5, 1, 0.5, 2, 0.5, 1, 1, 1, 0.5],
-    electric: [1, 1, 2, 1, 0, 1, 1, 1, 1, 2, 0.5, 0.5, 1, 1, 0.5],
-    psychic: [1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 0.5, 1, 1],
-    ice: [1, 1, 2, 1, 2, 1, 1, 1, 1, 0.5, 2, 1, 1, 0.5, 2],
-    dragon: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2]
+    list: ["Normal", "Fight", "Flying", "Poison", "Ground", "Rock", "Bug", "Ghost", "Fire",
+            "Water", "Grass", "Electric", "Psychic", "Ice", "Dragon"],
+
+    chart: [[1, 1, 1, 1, 1, 0.5, 1, 0, 1, 1, 1, 1, 1, 1, 1],
+            [2, 1, 0.5, 0.5, 1, 2, 0.5, 0, 1, 1, 1, 1, 0.5, 2, 1],
+            [1, 2, 1, 1, 1, 0.5, 2, 1, 1, 1, 2, 0.5, 1, 1, 1],
+            [1, 1, 1, 0.5, 0.5, 0.5, 2, 0.5, 1, 1, 2, 1, 1, 1, 1],
+            [1, 1, 0, 2, 1, 2, 0.5, 1, 2, 1, 0.5, 2, 1, 1, 1],
+            [1, 0.5, 2, 1, 0.5, 1, 2, 1, 2, 1, 1, 1, 1, 2, 1],
+            [1, 0.5, 0.5, 2, 1, 1, 1, 0.5, 0.5, 1, 2, 1, 2, 1, 1],
+            [0, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 0, 1, 1],
+            [1, 1, 1, 1, 1, 0.5, 2, 1, 0.5, 0.5, 2, 1, 1, 2, 0.5],
+            [1, 1, 1, 1, 2, 2, 1, 1, 2, 0.5, 0.5, 1, 1, 1, 0.5],
+            [1, 1, 0.5, 0.5, 2, 2, 0.5, 1, 0.5, 2, 0.5, 1, 1, 1, 0.5],
+            [1, 1, 2, 1, 0, 1, 1, 1, 1, 2, 0.5, 0.5, 1, 1, 0.5],
+            [1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 0.5, 1, 1],
+            [1, 1, 2, 1, 2, 1, 1, 1, 1, 0.5, 2, 1, 1, 0.5, 2],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2]],
+
+    getStabMult: function(moveType, pokeType)
+    {
+        for(let type of pokeType)
+        {
+            if(this.getChartIndex(type) == this.getChartIndex(moveType))
+            {
+                return 1.5;
+            }
+        }
+
+        return 1;
+    },
+
+    getEffMult: function(moveType, defTypes)
+    {
+        var eff = 1;
+
+        for(let def of defTypes)
+        {
+            eff *= this.chart[this.getChartIndex(moveType)][this.getChartIndex(def)];
+        }
+
+        return eff;
+    },
+
+    getChartIndex: function(type)
+    {
+        for(var i = 0; i < this.list.length; i++)
+        {
+            if(this.list[i].localeCompare(type) == 0)
+            {
+                return i;
+            }
+        }
+    }
 };
 
 
@@ -128,6 +167,7 @@ var typeEffectiveness = {
 var currentState;
 var cpuPokemon;
 var userPokemon;
+var debug = true;
 
 
 // FIX
@@ -214,7 +254,6 @@ var cpuTurn =
             $("#attack-img").removeClass("cpu-attack-img");
 
             var crit = 1;
-            var mod;
             var critPerc = cpuPokemon.speed / 512;
             var rand = Math.random();
             var damage;
@@ -225,7 +264,7 @@ var cpuTurn =
 
             if(!cpuPokemon.effect) 
             {
-                damage = damageFormula(crit);
+                damage = damageFormula(crit, cpuPokemon, currentCPUMove, userPokemon);
                 userPokemon.hp -= damage;
 
                 if(crit == 2) 
@@ -371,8 +410,8 @@ var playerTurn =
                 {
                     crit = 2;
                 }
-                damage = damageFormula(crit);
                 
+                damage = damageFormula(crit, userPokemon, currentUserMove, cpuPokemon);
                 cpuPokemon.hp -= damage;
 
                 if(crit == 2) 
@@ -430,16 +469,29 @@ var playerTurn =
     }
 };
 
-// param:
+// param: critical hit value, attacking pokemon, move played, defending pokemon
 // return: value of damage given (int)
-var damageFormula = function(crit) 
+var damageFormula = function(crit, offPoke, move, defPoke) 
 {    
-    var x = (2 * userPokemon.lvl + 10) / 250;
-    var y = userPokemon.attack / cpuPokemon.defense;
-    var z = currentUserMove.power;
-    mod = crit * (Math.random() * (1 - 0.85) + 0.85);
+    var level = offPoke.lvl;
+    var power = move.power;
+    var att = offPoke.attack;
+    var def = defPoke.defense;
+    var stab = typeEffectiveness.getStabMult(move.type, offPoke.type);
+    var type = typeEffectiveness.getEffMult(move.type, defPoke.type)
+    var mod = crit * (Math.random() * (1 - 0.85) + 0.85) * stab * type;
 
-    return Math.floor(mod * ((x * y * z) + 2));
+    var damage = ((((2 * level / 5 + 2) * power * att / def) / 50) + 2) * mod;
+
+
+    if(debug)
+    {
+        console.log("level: " + level + ", power: " + power + ", att: " + att +
+                ", def: " + def + ", stab: " + stab + ", type: " + type + ", mod: " + mod)
+    }
+
+
+    return Math.floor(damage);
 };
 
 var loop = function() 
@@ -488,25 +540,10 @@ var init = function()
     $("#user-hp").text(userPokemon.hp + " / " + userPokemon.hp);
 
 
-    var debug = false;
     if(debug)
     {
         console.log("DEBUGGING\n\n");
-        console.log(typeEffectiveness.bug.length);
-        console.log(typeEffectiveness.dragon.length);
-        console.log(typeEffectiveness.electric.length);
-        console.log(typeEffectiveness.fight.length);
-        console.log(typeEffectiveness.fire.length);
-        console.log(typeEffectiveness.flying.length);
-        console.log(typeEffectiveness.ghost.length);
-        console.log(typeEffectiveness.grass.length);
-        console.log(typeEffectiveness.ground.length);
-        console.log(typeEffectiveness.ice.length);
-        console.log(typeEffectiveness.normal.length);
-        console.log(typeEffectiveness.poison.length);
-        console.log(typeEffectiveness.psychic.length);
-        console.log(typeEffectiveness.rock.length);
-        console.log(typeEffectiveness.water.length);
+        
     }
 
 
