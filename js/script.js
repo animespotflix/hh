@@ -276,7 +276,7 @@ var playerTurn = {
             $("#chat-text").text("What will " + userPokemon.name + " do?");
 
             for(var i = moveButtons.length - 1; i >= 0; i--) {
-                $(moveButtons[i]).text(userPokemon.moves[i].name);
+                $(moveButtons[i]).text(userPokemon.moves[i].name + " (pp: " + userPokemon.moves[i].pp + ")");
             }
         };
 
@@ -445,6 +445,31 @@ var init = function() {
     $("#user-name").text(userPokemon.name);
     $("#user-lvl").text("Lv" + userPokemon.lvl);
     $("#user-hp").text(userPokemon.hp + " / " + userPokemon.hp);
+
+    
+    
+    var debug = true;
+    if(debug)
+    {
+        console.log("DEBUGGING\n\n");
+        console.log(typeEffectiveness.bug.length);
+        console.log(typeEffectiveness.dragon.length);
+        console.log(typeEffectiveness.electric.length);
+        console.log(typeEffectiveness.fight.length);
+        console.log(typeEffectiveness.fire.length);
+        console.log(typeEffectiveness.flying.length);
+        console.log(typeEffectiveness.ghost.length);
+        console.log(typeEffectiveness.grass.length);
+        console.log(typeEffectiveness.ground.length);
+        console.log(typeEffectiveness.ice.length);
+        console.log(typeEffectiveness.normal.length);
+        console.log(typeEffectiveness.poison.length);
+        console.log(typeEffectiveness.psychic.length);
+        console.log(typeEffectiveness.rock.length);
+        console.log(typeEffectiveness.water.length);
+    }
+
+
 
     // FIX THIS TO LOOK AT SPEED STAT
     // If same, it's random
