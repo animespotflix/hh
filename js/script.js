@@ -134,18 +134,22 @@ var userPokemon;
 // moves need to be chosen before deciding who goes when
 
 
-var cpuTurn = {
-    play: function() {
+var cpuTurn = 
+{
+    play: function() 
+    {
         var randomMove = Math.floor(Math.random() * 4);
         var currentCPUMove = cpuPokemon.moves[randomMove];
         cpuPokemon.moves[randomMove].pp--;
 
-        var setUpCPUField = function() {
+        var setUpCPUField = function() 
+        {
             $("#chat-text").text("What will " + cpuPokemon.name + " do?");
             setTimeout(prepareToAttack, 1000);
         };
 
-        var prepareToAttack = function() {
+        var prepareToAttack = function() 
+        {
             $("#cpuPoke-img").stop();
             $("#cpuPoke-img").animate({
                 top: "-=25",
@@ -158,15 +162,18 @@ var cpuTurn = {
             getAccuracy();
         };
 
-        var getAccuracy = function() {
+        var getAccuracy = function() 
+        {
             var setAccuracy = Math.random();
 
-            if(setAccuracy <= currentCPUMove.accuracy) {
+            if(setAccuracy <= currentCPUMove.accuracy) 
+            {
                 $("#chat-text").text(cpuPokemon.name + " used " + currentCPUMove.name + "!");
                 getMoveType();
             }
 
-            else {
+            else 
+            {
                 $("#chat-text").text(cpuPokemon.name + " used " + currentCPUMove.name + ".\n" + cpuPokemon.name + "'s attack missed!");
                 currentState = playerTurn;
                 setTimeout(loop, 1500);
@@ -174,29 +181,35 @@ var cpuTurn = {
         };
 
 
-        var getMoveType = function () {
+        var getMoveType = function() 
+        {
             showMoveAnimation();
 
-            if(currentCPUMove.attDef == "Attack") {
+            if(currentCPUMove.attDef == "Attack") 
+            {
                 setTimeout(attackingMove, 1500);
             }
 
-            else {
+            else 
+            {
                 setTimeout(defensiveMove, 1500);
             }
         };
 
-        var showMoveAnimation = function() {
+        var showMoveAnimation = function() 
+        {
             $("#attack-img").addClass("cpu-attack-img");
             $("#attack-img").removeClass("hide");
             //$("#attack-img").
             //fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100);
-            for(i = 0; i < 4; i++) {
+            for(i = 0; i < 4; i++) 
+            {
                 $("#attack-img").fadeIn(100).fadeOut(100);
             }
         };
 
-        var attackingMove = function() {
+        var attackingMove = function() 
+        {
             $("#attack-img").addClass("hide");
             $("#attack-img").removeClass("cpu-attack-img");
 
@@ -205,32 +218,27 @@ var cpuTurn = {
             var critPerc = cpuPokemon.speed / 512;
             var rand = Math.random();
             var damage;
-            var damageFormula = function() {
-                if(rand <= critPerc) {
-                    crit = 2;
-                }
+            if(rand <= critPerc) 
+            {
+                crit = 2;
+            }
 
-                var x = (2 * cpuPokemon.lvl + 10) / 250;
-                var y = cpuPokemon.attack / userPokemon.defense;
-                var z = currentCPUMove.power;
-                mod = crit * (Math.random() * (1 - 0.85) + 0.85);
-
-                damage = Math.floor(mod * ((x * y * z) + 2));
-            };
-
-            if(!cpuPokemon.effect) {
-                damageFormula();
+            if(!cpuPokemon.effect) 
+            {
+                damage = damageFormula(crit);
                 userPokemon.hp -= damage;
 
-                if(crit == 2) {
+                if(crit == 2) 
+                {
                     $("#chat-text").text("Critical hit!");
                     console.log("Crit!");
                 }
 
-                console.log(mod + " " + crit + " Pika gave: " + damage + " Charm hp: " + userPokemon.hp + ", pp: " + currentCPUMove.pp);
+                console.log(crit + " Pika gave: " + damage + " Charm hp: " + userPokemon.hp + ", pp: " + currentCPUMove.pp);
             }
 
-            else {
+            else 
+            {
                 //userPokemon.health -= (currentCPUMove.power) - (currentCPUMove.power * cpuPokemon.effect);
                 userPokemon.hp -= (currentCPUMove.power) * (1 - cpuPokemon.effect);
                 cpuPokemon.effect = null;
@@ -243,16 +251,19 @@ var cpuTurn = {
             $("#user-hp").text(userPokemon.hp + " / " + userPokemon.base_hp);
             currentState = playerTurn;
 
-            if(crit == 2) {
+            if(crit == 2) 
+            {
                 setTimeout(loop, 1500);
             }
 
-            else {
+            else 
+            {
                 loop();
             }
         };
 
-        var defensiveMove = function() {
+        var defensiveMove = function() 
+        {
             $("#attack-img").addClass("hide");
             $("#attack-img").removeClass("cpu-attack-img");
 
@@ -265,22 +276,27 @@ var cpuTurn = {
     }
 };
 
-var playerTurn = {
-    play: function() {
+var playerTurn = 
+{
+    play: function() 
+    {
         var currentUserMove;
 
-        var setUpUserField = function() {
+        var setUpUserField = function() 
+        {
             var moveButtons = ["#move1-text", "#move2-text", "#move3-text", "#move4-text"];
 
             $("#user-buttons").removeClass("hide");
             $("#chat-text").text("What will " + userPokemon.name + " do?");
 
-            for(var i = moveButtons.length - 1; i >= 0; i--) {
+            for(var i = moveButtons.length - 1; i >= 0; i--) 
+            {
                 $(moveButtons[i]).html(userPokemon.moves[i].name + "<br> (pp: " + userPokemon.moves[i].pp + ")");
             }
         };
 
-        var prepareToAttack = function() {
+        var prepareToAttack = function() 
+        {
             $("#user-buttons").addClass("hide");
             $("#userPoke-img").stop();
 
@@ -295,34 +311,41 @@ var playerTurn = {
             getAccuracy();
         };
 
-        var getAccuracy = function() {
+        var getAccuracy = function() 
+        {
             var setAccuracy = Math.random();
 
-            if(setAccuracy <= currentUserMove.accuracy) {
+            if(setAccuracy <= currentUserMove.accuracy) 
+            {
                 $("#chat-text").text(userPokemon.name + " used " + currentUserMove.name + "!");
                 getMoveType();
             }
 
-            else {
+            else 
+            {
                 $("#chat-text").text(userPokemon.name + " used " + currentUserMove.name + ".\n" + userPokemon.name + "'s attack missed!");
                 currentState = cpuTurn;
                 setTimeout(loop, 1500);
             }
         };
 
-        var getMoveType = function () {
+        var getMoveType = function () 
+        {
             showMoveAnimation();
 
-            if(currentUserMove.attDef == "Attack") {
+            if(currentUserMove.attDef == "Attack") 
+            {
                 setTimeout(attackingMove, 1500);
             }
 
-            else {
+            else 
+            {
                 setTimeout(defensiveMove, 1500);
             }
         };
 
-        var showMoveAnimation = function() {
+        var showMoveAnimation = function() 
+        {
             $("#attack-img").addClass("user-attack-img");
             $("#attack-img").removeClass("hide");
             //$("#attack-img").
@@ -332,41 +355,37 @@ var playerTurn = {
             }
         };
 
-        var attackingMove = function() {
+        var attackingMove = function() 
+        {
             $("#attack-img").addClass("hide");
             $("#attack-img").removeClass("user-attack-img");
 
             var crit = 1;
-            var mod;
             var critPerc = userPokemon.speed / 512;
             var rand = Math.random();
             var damage;
-            var damageFormula = function() {
-                if(rand <= critPerc) {
+
+            if(!userPokemon.effect) 
+            {
+                if(rand <= critPerc) 
+                {
                     crit = 2;
                 }
-
-                var x = (2 * userPokemon.lvl + 10) / 250;
-                var y = userPokemon.attack / cpuPokemon.defense;
-                var z = currentUserMove.power;
-                mod = crit * (Math.random() * (1 - 0.85) + 0.85);
-
-                damage = Math.floor(mod * ((x * y * z) + 2));
-            };
-
-            if(!userPokemon.effect) {
-                damageFormula();
+                damage = damageFormula(crit);
+                
                 cpuPokemon.hp -= damage;
 
-                if(crit == 2) {
+                if(crit == 2) 
+                {
                     $("#chat-text").text("Critical hit!");
                     console.log("Crit!");
                 }
 
-                console.log(mod + " " + crit + " Charm gave: " + damage + " Pika hp: " + cpuPokemon.hp + ", pp: " + currentUserMove.pp);
+                console.log(crit + " Charm gave: " + damage + " Pika hp: " + cpuPokemon.hp + ", pp: " + currentUserMove.pp);
             }
 
-            else {
+            else 
+            {
                 //cpuPokemon.health -= (currentUserMove.power) - (currentUserMove.power * userPokemon.effect);
                 cpuPokemon.hp -= (currentUserMove.power) * (1 - userPokemon.effect);
                 userPokemon.effect = null;
@@ -379,7 +398,8 @@ var playerTurn = {
             $("#cpu-hp").text(cpuPokemon.hp + " / " + cpuPokemon.base_hp);
             currentState = cpuTurn;
 
-            if(crit == 2) {
+            if(crit == 2) 
+            {
                 setTimeout(loop, 1500);
             }
 
@@ -388,7 +408,8 @@ var playerTurn = {
             }
         };
 
-        var defensiveMove = function() {
+        var defensiveMove = function() 
+        {
             $("#attack-img").addClass("hide");
             $("#attack-img").removeClass("user-attack-img");
 
@@ -397,7 +418,8 @@ var playerTurn = {
             loop();
         };
 
-        $("#move1-button, #move2-button, #move3-button, #move4-button").unbind().click(function() {
+        $("#move1-button, #move2-button, #move3-button, #move4-button").unbind().click(function() 
+        {
             var move = $(this).attr("value");
             currentUserMove = userPokemon.moves[move];
             userPokemon.moves[move].pp--;
@@ -408,34 +430,53 @@ var playerTurn = {
     }
 };
 
-var loop = function() {
-    if(cpuPokemon.hp <= 0) {
+// param:
+// return: value of damage given (int)
+var damageFormula = function(crit) 
+{    
+    var x = (2 * userPokemon.lvl + 10) / 250;
+    var y = userPokemon.attack / cpuPokemon.defense;
+    var z = currentUserMove.power;
+    mod = crit * (Math.random() * (1 - 0.85) + 0.85);
+
+    return Math.floor(mod * ((x * y * z) + 2));
+};
+
+var loop = function() 
+{
+    if(cpuPokemon.hp <= 0) 
+    {
         //$("#game-over").removeClass("hide");
         //$("#game-over").text("Game Over!\n You win!");
         $("#chat-text").text("Foe " + cpuPokemon.name + " fainted!");
         //if enter is pressed
         //$("#chat-text").text("You win!");
 
-        document.addEventListener('keydown', function(event) {
-            if(event.keyCode == 13) {
+        document.addEventListener('keydown', function(event) 
+        {
+            if(event.keyCode == 13) 
+            {
                 $("#chat-text").text("You win!");
             }
         });
     }
 
-    else if(userPokemon.hp <= 0) {
+    else if(userPokemon.hp <= 0) 
+    {
         //$("#game-over").removeClass("hide");
         //$("#game-over").text("Game Over!\nCPU wins!");
         $("#chat-text").text(userPokemon.name + " fainted!");
     }
 
-    else {
+    else 
+    {
         currentState.play();
     }
 }
 
 // START
-var init = function() {
+var init = function() 
+{
     cpuPokemon = pikachu;
     $("#cpu-name").text(cpuPokemon.name);
     $("#cpu-lvl").text("Lv" + cpuPokemon.lvl);
@@ -446,9 +487,8 @@ var init = function() {
     $("#user-lvl").text("Lv" + userPokemon.lvl);
     $("#user-hp").text(userPokemon.hp + " / " + userPokemon.hp);
 
-    
-    
-    var debug = true;
+
+    var debug = false;
     if(debug)
     {
         console.log("DEBUGGING\n\n");
@@ -483,7 +523,8 @@ var init = function() {
     else if(cpuPokemon.speed > userPokemon.speed)
         currentState = cpuTurn;
 
-    else {
+    else 
+    {
         var rand = Math.random();
 
         if(rand < 0.5)
