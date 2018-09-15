@@ -276,7 +276,7 @@ var playerTurn = {
             $("#chat-text").text("What will " + userPokemon.name + " do?");
 
             for(var i = moveButtons.length - 1; i >= 0; i--) {
-                $(moveButtons[i]).text(userPokemon.moves[i].name + " (pp: " + userPokemon.moves[i].pp + ")");
+                $(moveButtons[i]).html(userPokemon.moves[i].name + "<br> (pp: " + userPokemon.moves[i].pp + ")");
             }
         };
 
