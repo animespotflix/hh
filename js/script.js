@@ -95,6 +95,7 @@ var cpuTurn =
             var critPerc = cpuPokemon.speed / 512;
             var rand = Math.random();
             var damage;
+
             if(rand <= critPerc) 
             {
                 crit = 2;
@@ -238,12 +239,22 @@ var playerTurn =
             $("#attack-img").removeClass("user-attack-img");
 
             var crit = 1;
-            var critPerc = userPokemon.speed / 512;
+            var critPerc = userPokemon.base_speed / 512;
             var rand = Math.random();
             var damage;
 
             if(!userPokemon.effect) 
             {
+                // High crit ratio: Crabhammer, Karate Chop, Razor Leaf, Slash
+                if(currentUserMove.name.localeCompare("Crabhammer") == 0 ||
+                        currentUserMove.name.localeCompare("Karate Chop") == 0 ||
+                        currentUserMove.name.localeCompare("Razor Leaf") == 0 ||
+                        currentUserMove.name.localeCompare("Slash") == 0)
+                {
+                    critPerc = userPokemon.base_speed / 64;
+                }
+
+
                 if(rand <= critPerc) 
                 {
                     crit = 2;
@@ -324,9 +335,9 @@ var damageFormula = function(crit, offPoke, move, defPoke)
     var power = move.power;
     var stab = typeEffectiveness.getStabMult(move.type, offPoke.type);
     var type = typeEffectiveness.getEffMult(move.type, defPoke.type)
-    var mod = (Math.random() * (1 - 0.85) + 0.85) * stab * type;
+    var mod = Math.floor(Math.floor((Math.random() * (255 - 217 + 1) + 217) / 255 * stab) * type);  // random a number [217, 255] divided by 255
 
-    var damage = ((((2 * level / 5 + 2) * power * att / def) / 50) + 2) * mod;
+    var damage = Math.floor((Math.floor(Math.floor(Math.floor(Math.floor(Math.floor(2 * level / 5 + 2) * power) * att) / def) / 50) + 2) * mod);
  
 
     if(debug)
@@ -369,6 +380,7 @@ var loop = function()
 
     else 
     {
+        // still need to ask for move first (some moves have higher priority)
         if(numMovesMade % 2 == 1)
             setState();
         
