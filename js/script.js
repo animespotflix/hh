@@ -1,6 +1,81 @@
 // JAVASCRIPT
 
 
+// MOVES
+var moveList = [{
+    name: "Dig",
+    type: ["Ground"],
+    attDef: "Attack",
+    power: 100,
+    accuracy: 1,
+    priority: 0,
+    pp: 10
+},
+{
+    name: "Slash",
+    type: ["Normal"],
+    attDef: "Attack",
+    power: 70,          // hit crit percentage move
+    accuracy: 1,
+    priority: 0,
+    pp: 20
+},
+{
+    name: "Flamethrower",
+    type: ["Fire"],
+    attDef: "Attack",
+    power: 95,
+    accuracy: 1,
+    priority: 0,
+    pp: 15
+},
+{
+    name: "Mega Punch",
+    type: ["Normal"],
+    attDef: "Attack",
+    power: 80,
+    accuracy: 0.85,
+    priority: 0,
+    pp: 20
+},
+{
+    name: "Thunder Wave",
+    type: ["Electric"],
+    attDef: "Attack",
+    power: 0,
+    accuracy: 1,
+    priority: 0,
+    pp: 20
+},
+{
+    name: "Quick Attack",
+    type: ["Normal"],
+    attDef: "Attack",
+    power: 40,
+    accuracy: 1,
+    priority: 1,
+    pp: 30
+},
+{
+    name: "Thunderbolt",
+    type: ["Electric"],
+    attDef: "Attack",
+    power: 95,
+    accuracy: 1,
+    priority: 0,
+    pp: 15
+},
+{
+    name: "Thunder",
+    type: ["Electric"],
+    attDef: "Attack",
+    power: 120,
+    accuracy: 0.7,
+    priority: 0,
+    pp: 10
+}];
+
+
 // POKEMON
 var charmander = {
     name: "Charmander",
@@ -8,48 +83,17 @@ var charmander = {
     lvl: 50,
     type: ["Fire"],
     base_hp: 145,
-    hp: 145,
-    attack: 103,
-    defense: 94,
-    speed: 116,
-    special: 101,
+    hp: base_hp,
+    base_attack: 103,
+    attack: base_attack,
+    base_defense: 94,
+    defense: base_defense,
+    base_speed: 116,
+    speed: base_speed,
+    base_special: 101,
+    special: base_special,
     effect: null,
-    moves: [{
-        name: "Dig",
-        type: ["Ground"],
-        attDef: "Attack",
-        power: 100,
-        accuracy: 1,
-        priority: 0,
-        pp: 10
-    },
-    {
-        name: "Slash",
-        type: ["Normal"],
-        attDef: "Attack",
-        power: 70,
-        accuracy: 1,
-        priority: 0,
-        pp: 20
-    },
-    {
-        name: "Flamethrower",
-        type: ["Fire"],
-        attDef: "Attack",
-        power: 95,
-        accuracy: 1,
-        priority: 0,
-        pp: 15
-    },
-    {
-        name: "Mega Punch",
-        type: ["Normal"],
-        attDef: "Attack",
-        power: 80,
-        accuracy: 0.85,
-        priority: 0,
-        pp: 20
-    }]
+    moves: [moveList[0], moveList[1], moveList[2], moveList[3]]
 };
 
 var pikachu = {
@@ -59,52 +103,25 @@ var pikachu = {
     type: ["Electric"],
     base_hp: 141,
     hp: 141,
-    attack: 106,
-    defense: 81,
-    speed: 141,
-    special: 101,
+    base_attack: 106,
+    attack: base_attack,
+    base_defense: 81,
+    defense: base_defense,
+    base_speed: 141,
+    speed: base_speed,
+    base_special: 101,
+    special: base_special,
     effect: null,
-    moves: [{
-        name: "ThunderShock",
-        type: ["Electric"],
-        attDef: "Attack",
-        power: 40,
-        accuracy: 1,
-        priority: 0,
-        pp: 30
-    },
-    {
-        name: "Quick Attack",
-        type: ["Normal"],
-        attDef: "Attack",
-        power: 40,
-        accuracy: 1,
-        priority: 1,
-        pp: 30
-    },
-    {
-        name: "Thunderbolt",
-        type: ["Electric"],
-        attDef: "Attack",
-        power: 95,
-        accuracy: 1,
-        priority: 0,
-        pp: 15
-    },
-    {
-        name: "Thunder",
-        type: ["Electric"],
-        attDef: "Attack",
-        power: 120,
-        accuracy: 0.7,
-        priority: 0,
-        pp: 10
-    }]
+    moves: [moveList[4], moveList[5], moveList[6], moveList[7]]
 };
 
+// TYPE EFFECTIVENESS CHART
 var typeEffectiveness = {
     list: ["Normal", "Fight", "Flying", "Poison", "Ground", "Rock", "Bug", "Ghost", "Fire",
             "Water", "Grass", "Electric", "Psychic", "Ice", "Dragon"],
+
+    specialMoves: ["Psychic", "Grass", "Dragon", "Fire", "Water", "Electric", "Ice"],
+    physicalMoves: ["Rock", "Ground", "Flying", "Poison", "Fighting", "Bug", "Ghost", "Normal"],
 
     chart: [[1, 1, 1, 1, 1, 0.5, 1, 0, 1, 1, 1, 1, 1, 1, 1],
             [2, 1, 0.5, 0.5, 1, 2, 0.5, 0, 1, 1, 1, 1, 0.5, 2, 1],
@@ -156,10 +173,15 @@ var typeEffectiveness = {
                 return i;
             }
         }
+    },
+
+    // param the move
+    // return true if special move, false otherwise.
+    isSpecialMove: function(move)
+    {
+        return (this.specialMoves.indexOf(move.type) > -1) && (this.physicalMoves.indexOf(move.type) == -1);
     }
 };
-
-
 
 
 
@@ -172,6 +194,7 @@ var debug = true;
 
 // FIX
 // moves need to be chosen before deciding who goes when
+// paralyzed pokemon have 25% of not being able to attack and speed is reduced by 75%
 
 
 var cpuTurn = 
@@ -473,16 +496,23 @@ var playerTurn =
 // return: value of damage given (int)
 var damageFormula = function(crit, offPoke, move, defPoke) 
 {    
-    var level = offPoke.lvl;
-    var power = move.power;
     var att = offPoke.attack;
     var def = defPoke.defense;
+
+    if(isSpecialMove(move))  // use special stat if it is a special move type
+    {
+        att = offPoke.special;
+        def = defPoke.special;
+    }
+
+    var level = offPoke.lvl * crit;
+    var power = move.power;
     var stab = typeEffectiveness.getStabMult(move.type, offPoke.type);
     var type = typeEffectiveness.getEffMult(move.type, defPoke.type)
-    var mod = crit * (Math.random() * (1 - 0.85) + 0.85) * stab * type;
+    var mod = (Math.random() * (1 - 0.85) + 0.85) * stab * type;
 
     var damage = ((((2 * level / 5 + 2) * power * att / def) / 50) + 2) * mod;
-
+ 
 
     if(debug)
     {
