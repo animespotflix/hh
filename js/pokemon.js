@@ -36,3 +36,10 @@ var pikachu = {
     effect: null,
     moves: [moveList[4], moveList[5], moveList[6], moveList[7]]
 };
+
+// stat multipliers (stages), accuracy, evasion
+// 25/100	28/100	33/100	40/100	50/100	66/100	100/100	150/100	200/100	250/100	300/100	350/100	400/100
+var stageMultiplier = function()
+{
+
+}
