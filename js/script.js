@@ -1,192 +1,8 @@
 // JAVASCRIPT
 
-
-// MOVES
-var moveList = [{
-    name: "Dig",
-    type: ["Ground"],
-    attDef: "Attack",
-    power: 100,
-    accuracy: 1,
-    priority: 0,
-    pp: 10
-},
-{
-    name: "Slash",
-    type: ["Normal"],
-    attDef: "Attack",
-    power: 70,          // hit crit percentage move
-    accuracy: 1,
-    priority: 0,
-    pp: 20
-},
-{
-    name: "Flamethrower",
-    type: ["Fire"],
-    attDef: "Attack",
-    power: 95,
-    accuracy: 1,
-    priority: 0,
-    pp: 15
-},
-{
-    name: "Mega Punch",
-    type: ["Normal"],
-    attDef: "Attack",
-    power: 80,
-    accuracy: 0.85,
-    priority: 0,
-    pp: 20
-},
-{
-    name: "Thunder Wave",
-    type: ["Electric"],
-    attDef: "Attack",
-    power: 0,
-    accuracy: 1,
-    priority: 0,
-    pp: 20
-},
-{
-    name: "Quick Attack",
-    type: ["Normal"],
-    attDef: "Attack",
-    power: 40,
-    accuracy: 1,
-    priority: 1,
-    pp: 30
-},
-{
-    name: "Thunderbolt",
-    type: ["Electric"],
-    attDef: "Attack",
-    power: 95,
-    accuracy: 1,
-    priority: 0,
-    pp: 15
-},
-{
-    name: "Thunder",
-    type: ["Electric"],
-    attDef: "Attack",
-    power: 120,
-    accuracy: 0.7,
-    priority: 0,
-    pp: 10
-}];
-
-
-// POKEMON
-var charmander = {
-    name: "Charmander",
-    //health: 100,
-    lvl: 50,
-    type: ["Fire"],
-    base_hp: 145,
-    hp: base_hp,
-    base_attack: 103,
-    attack: base_attack,
-    base_defense: 94,
-    defense: base_defense,
-    base_speed: 116,
-    speed: base_speed,
-    base_special: 101,
-    special: base_special,
-    effect: null,
-    moves: [moveList[0], moveList[1], moveList[2], moveList[3]]
-};
-
-var pikachu = {
-    name: "Pikachu",
-    //health: 100,
-    lvl: 50,
-    type: ["Electric"],
-    base_hp: 141,
-    hp: 141,
-    base_attack: 106,
-    attack: base_attack,
-    base_defense: 81,
-    defense: base_defense,
-    base_speed: 141,
-    speed: base_speed,
-    base_special: 101,
-    special: base_special,
-    effect: null,
-    moves: [moveList[4], moveList[5], moveList[6], moveList[7]]
-};
-
-// TYPE EFFECTIVENESS CHART
-var typeEffectiveness = {
-    list: ["Normal", "Fight", "Flying", "Poison", "Ground", "Rock", "Bug", "Ghost", "Fire",
-            "Water", "Grass", "Electric", "Psychic", "Ice", "Dragon"],
-
-    specialMoves: ["Psychic", "Grass", "Dragon", "Fire", "Water", "Electric", "Ice"],
-    physicalMoves: ["Rock", "Ground", "Flying", "Poison", "Fighting", "Bug", "Ghost", "Normal"],
-
-    chart: [[1, 1, 1, 1, 1, 0.5, 1, 0, 1, 1, 1, 1, 1, 1, 1],
-            [2, 1, 0.5, 0.5, 1, 2, 0.5, 0, 1, 1, 1, 1, 0.5, 2, 1],
-            [1, 2, 1, 1, 1, 0.5, 2, 1, 1, 1, 2, 0.5, 1, 1, 1],
-            [1, 1, 1, 0.5, 0.5, 0.5, 2, 0.5, 1, 1, 2, 1, 1, 1, 1],
-            [1, 1, 0, 2, 1, 2, 0.5, 1, 2, 1, 0.5, 2, 1, 1, 1],
-            [1, 0.5, 2, 1, 0.5, 1, 2, 1, 2, 1, 1, 1, 1, 2, 1],
-            [1, 0.5, 0.5, 2, 1, 1, 1, 0.5, 0.5, 1, 2, 1, 2, 1, 1],
-            [0, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 0, 1, 1],
-            [1, 1, 1, 1, 1, 0.5, 2, 1, 0.5, 0.5, 2, 1, 1, 2, 0.5],
-            [1, 1, 1, 1, 2, 2, 1, 1, 2, 0.5, 0.5, 1, 1, 1, 0.5],
-            [1, 1, 0.5, 0.5, 2, 2, 0.5, 1, 0.5, 2, 0.5, 1, 1, 1, 0.5],
-            [1, 1, 2, 1, 0, 1, 1, 1, 1, 2, 0.5, 0.5, 1, 1, 0.5],
-            [1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 0.5, 1, 1],
-            [1, 1, 2, 1, 2, 1, 1, 1, 1, 0.5, 2, 1, 1, 0.5, 2],
-            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2]],
-
-    getStabMult: function(moveType, pokeType)
-    {
-        for(let type of pokeType)
-        {
-            if(this.getChartIndex(type) == this.getChartIndex(moveType))
-            {
-                return 1.5;
-            }
-        }
-
-        return 1;
-    },
-
-    getEffMult: function(moveType, defTypes)
-    {
-        var eff = 1;
-
-        for(let def of defTypes)
-        {
-            eff *= this.chart[this.getChartIndex(moveType)][this.getChartIndex(def)];
-        }
-
-        return eff;
-    },
-
-    getChartIndex: function(type)
-    {
-        for(var i = 0; i < this.list.length; i++)
-        {
-            if(this.list[i].localeCompare(type) == 0)
-            {
-                return i;
-            }
-        }
-    },
-
-    // param the move
-    // return true if special move, false otherwise.
-    isSpecialMove: function(move)
-    {
-        return (this.specialMoves.indexOf(move.type) > -1) && (this.physicalMoves.indexOf(move.type) == -1);
-    }
-};
-
-
-
 // START OF BATTLE
 var currentState;
+var numMovesMade;
 var cpuPokemon;
 var userPokemon;
 var debug = true;
@@ -242,7 +58,6 @@ var cpuTurn =
                 setTimeout(loop, 1500);
             }
         };
-
 
         var getMoveType = function() 
         {
@@ -499,7 +314,7 @@ var damageFormula = function(crit, offPoke, move, defPoke)
     var att = offPoke.attack;
     var def = defPoke.defense;
 
-    if(isSpecialMove(move))  // use special stat if it is a special move type
+    if(typeEffectiveness.isSpecialMove(move))  // use special stat if it is a special move type
     {
         att = offPoke.special;
         def = defPoke.special;
@@ -526,6 +341,8 @@ var damageFormula = function(crit, offPoke, move, defPoke)
 
 var loop = function() 
 {
+    numMovesMade++;
+    console.log("Moves: " + numMovesMade);
     if(cpuPokemon.hp <= 0) 
     {
         //$("#game-over").removeClass("hide");
@@ -552,7 +369,35 @@ var loop = function()
 
     else 
     {
+        if(numMovesMade % 2 == 1)
+            setState();
+        
         currentState.play();
+    }
+}
+
+var setState = function()
+{
+    // FIX THIS TO LOOK AT SPEED STAT
+    // If same, it's random
+    // Quick Attack has priority 1
+    // Counter has priority -1
+    // Everything else is 0
+    // If paralyzed, speed reduced by 25%
+    if(userPokemon.speed > cpuPokemon.speed)
+        currentState = playerTurn;
+
+    else if(cpuPokemon.speed > userPokemon.speed)
+        currentState = cpuTurn;
+
+    else 
+    {
+        var rand = Math.random();
+
+        if(rand < 0.5)
+            currentState = cpuTurn;
+        else
+            currentState = playerTurn;
     }
 }
 
@@ -576,30 +421,8 @@ var init = function()
         
     }
 
-
-
-    // FIX THIS TO LOOK AT SPEED STAT
-    // If same, it's random
-    // Quick Attack has priority 1
-    // Counter has priority -1
-    // Everything else is 0
-    // If paralyzed, speed reduced by 25%
-    if(userPokemon.speed > cpuPokemon.speed)
-        currentState = playerTurn;
-
-    else if(cpuPokemon.speed > userPokemon.speed)
-        currentState = cpuTurn;
-
-    else 
-    {
-        var rand = Math.random();
-
-        if(rand < 0.5)
-            currentState = cpuTurn;
-        else
-            currentState = playerTurn;
-    }
-
+    numMovesMade = 0;
+    setState();    
     loop();
 };
 
