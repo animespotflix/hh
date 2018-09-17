@@ -59,7 +59,7 @@ var moveList = [{
 {
     name: "Thunder Wave",
     type: ["Electric"],
-    attDef: "Attack",
+    attDef: "Status",
     status: "PAR",
     statusPerc: 1,
     statMod: null,
