@@ -86,29 +86,31 @@ var loop = function()
             if(running)
                 setState(m);        
         }
-        if(currentState.localeCompare("foe") == 0 && running)
+        if(numMovesMade % 2 == 0 && currentState.localeCompare("foe") == 0 && running)
         {   
-            console.log("Foe: " + currentState);     
             foe.play();
             numMovesMade++;
-            if(!checkWinLoss())
-            {
-                setTimeout(user.play(), 1500);
-                numMovesMade++;
-                running = false;
-            }
+            setTimeout(function() {
+                if(!checkWinLoss())
+                {
+                    setTimeout(user.play(), 1500);
+                    numMovesMade++;
+                    running = false;
+                }
+            }, 3000);
         }
-        else if(running)
+        else if(numMovesMade % 2 == 0 && running)
         {
-            console.log("User: " + currentState);
             user.play();
             numMovesMade++;
-            if(!checkWinLoss())
-            {
-                setTimeout(foe.play(), 1500);
-                numMovesMade++;
-                running = false;
-            }
+            setTimeout(function() {
+                if(!checkWinLoss())
+                {
+                    setTimeout(foe.play(), 1500);
+                    numMovesMade++;
+                    running = false;
+                }
+            }, 3000);
         }
     }
 }
