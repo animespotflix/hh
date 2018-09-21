@@ -27,6 +27,7 @@ var cpuTurn =
             }, 200)
             });
 
+            foe.currentCpuMove.pp--;
             getAccuracy();
         };
 
@@ -85,38 +86,46 @@ var cpuTurn =
             var rand = Math.random();
             var damage;
 
-            if(rand <= critPerc) 
+            if(cpuPokemon.effect.localeCompare("PAR"))
             {
-                crit = 2;
-            }
 
-            if(!cpuPokemon.effect) 
-            {
-                damage = damageFormula(crit, cpuPokemon, foe.currentCpuMove, userPokemon);
-                userPokemon.hp -= damage;
 
-                if(crit == 2) 
+                if(!cpuPokemon.effect) 
                 {
-                    $("#chat-text").text("Critical hit!");
-                    console.log("Crit!");
+                    // High crit ratio: Crabhammer, Karate Chop, Razor Leaf, Slash
+                    if(foe.currentCpuMove.name.localeCompare("Slash") == 0 ||
+                        foe.currentCpuMove.name.localeCompare("Razor Leaf") == 0 ||
+                        foe.currentCpuMove.name.localeCompare("Crabhammer") == 0 ||
+                        foe.currentCpuMove.name.localeCompare("Karate Chop") == 0)
+                    {
+                        critPerc = cpuPokemon.speed / 64;
+                    }
+
+                    if(rand <= critPerc) 
+                    {
+                        crit = 2;
+                    }
+
+                    damage = damageFormula(crit, cpuPokemon, foe.currentCpuMove, userPokemon);
+                    userPokemon.hp -= damage;
+
+                    if(crit == 2) 
+                    {
+                        $("#chat-text").text("Critical hit!");
+                        console.log("Crit!");
+                    }
+
+                    console.log(crit + " Pika gave: " + damage + " Charm hp: " + userPokemon.hp + ", pp: " + foe.currentCpuMove.pp);
                 }
-
-                console.log(crit + " Pika gave: " + damage + " Charm hp: " + userPokemon.hp + ", pp: " + foe.currentCpuMove.pp);
             }
 
-            else 
-            {
-                //userPokemon.health -= (currentCPUMove.power) - (currentCPUMove.power * cpuPokemon.effect);
-                userPokemon.hp -= (foe.currentCpuMove.power) * (1 - cpuPokemon.effect);
-                cpuPokemon.effect = null;
-            }
+            
 
             if(userPokemon.hp < 0)
                 userPokemon.hp = 0;
 
             $("#user-health-bar").css("width", userPokemon.hp/userPokemon.base_hp * 100 + "%");
             $("#user-hp").text(userPokemon.hp + " / " + userPokemon.base_hp);
-            //currentState = user;
 
             if(crit == 2) 
             {
@@ -134,8 +143,17 @@ var cpuTurn =
             $("#attack-img").addClass("hide");
             $("#attack-img").removeClass("cpu-attack-img");
 
-            userPokemon.effect = foe.currentCpuMove.power;
-            //currentState = user;
+            var status = "None";
+            if(Math.random() < foe.currentCPUMove.statusPerc && foe.currentCPUMove.status != null)
+            {
+                status = foe.currentCPUMove.status;
+            }
+            if(status.localeCompare("PAR") == 0)
+            {
+                userPokemon.effect = "PAR";
+                userPokemon.speed *= 0.75;
+            }
+
             loop();
         };
 
@@ -174,6 +192,7 @@ var playerTurn =
             }, 200)
             });
 
+            user.currentUserMove.pp--;
             getAccuracy();
         };
 
@@ -190,7 +209,6 @@ var playerTurn =
             else 
             {
                 $("#chat-text").text(userPokemon.name + " used " + user.currentUserMove.name + ".\n" + userPokemon.name + "'s attack missed!");
-                //currentState = foe;
                 setTimeout(loop, 1500);
             }
         };
@@ -231,40 +249,36 @@ var playerTurn =
             var rand = Math.random();
             var damage;
 
-            if(!userPokemon.effect) 
+            if(userPokemon.effect.localeCompare("PAR") == 0)
             {
-                // High crit ratio: Crabhammer, Karate Chop, Razor Leaf, Slash
-                if(user.currentUserMove.name.localeCompare("Crabhammer") == 0 ||
-                        user.currentUserMove.name.localeCompare("Karate Chop") == 0 ||
-                        user.currentUserMove.name.localeCompare("Razor Leaf") == 0 ||
-                        user.currentUserMove.name.localeCompare("Slash") == 0)
+                if(!userPokemon.effect) 
                 {
-                    critPerc = userPokemon.base_speed / 64;
+                    // High crit ratio: Crabhammer, Karate Chop, Razor Leaf, Slash
+                    if(user.currentUserMove.name.localeCompare("Crabhammer") == 0 ||
+                            user.currentUserMove.name.localeCompare("Karate Chop") == 0 ||
+                            user.currentUserMove.name.localeCompare("Razor Leaf") == 0 ||
+                            user.currentUserMove.name.localeCompare("Slash") == 0)
+                    {
+                        critPerc = userPokemon.base_speed / 64;
+                    }
+
+
+                    if(rand <= critPerc) 
+                    {
+                        crit = 2;
+                    }
+                    
+                    damage = damageFormula(crit, userPokemon, user.currentUserMove, cpuPokemon);
+                    cpuPokemon.hp -= damage;
+
+                    if(crit == 2) 
+                    {
+                        $("#chat-text").text("Critical hit!");
+                        console.log("Crit!");
+                    }
+
+                    console.log(crit + " Charm gave: " + damage + " Pika hp: " + cpuPokemon.hp + ", pp: " + user.currentUserMove.pp);
                 }
-
-
-                if(rand <= critPerc) 
-                {
-                    crit = 2;
-                }
-                
-                damage = damageFormula(crit, userPokemon, user.currentUserMove, cpuPokemon);
-                cpuPokemon.hp -= damage;
-
-                if(crit == 2) 
-                {
-                    $("#chat-text").text("Critical hit!");
-                    console.log("Crit!");
-                }
-
-                console.log(crit + " Charm gave: " + damage + " Pika hp: " + cpuPokemon.hp + ", pp: " + user.currentUserMove.pp);
-            }
-
-            else 
-            {
-                //cpuPokemon.health -= (currentUserMove.power) - (currentUserMove.power * userPokemon.effect);
-                cpuPokemon.hp -= (user.currentUserMove.power) * (1 - userPokemon.effect);
-                userPokemon.effect = null;
             }
 
             if(cpuPokemon.hp < 0)
@@ -289,18 +303,19 @@ var playerTurn =
             $("#attack-img").addClass("hide");
             $("#attack-img").removeClass("user-attack-img");
 
-            cpuPokemon.effect = user.currentUserMove.power;
-            //currentState = foe;
+            var status = "None";
+            if(Math.random() < user.currentUserMove.statusPerc && user.currentUserMove.status != null)
+            {
+                status = user.currentUserMove.status;
+            }
+            if(status.localeCompare("PAR") == 0)
+            {
+                cpuPokemon.effect = "PAR";
+                cpuPokemon.speed *= 0.75;
+            }
+
             loop();
         };
-
-        /*$("#move1-button, #move2-button, #move3-button, #move4-button").unbind().click(function() 
-        {
-            var move = $(this).attr("value");
-            user.currentUserMove = userPokemon.moves[move];
-            userPokemon.moves[move].pp--;
-            prepareToAttack();
-        });*/
 
         setUpUserField();
         prepareToAttack();
