@@ -80,7 +80,6 @@ var loop = function()
         // still need to ask for move first (some moves have higher priority)
         if(numMovesMade % 2 == 0 && !running)
         {
-            console.log("HERE" + running);
             var m = getMoves();
             
             if(running)
@@ -162,7 +161,6 @@ var setState = function(moves)
     // Everything else is 0
     // If paralyzed, speed reduced by 25%
 
-    console.log("setState");
     var playerMovePriority;
     var cpuMovePriority;
 
