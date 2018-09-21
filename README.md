@@ -1,18 +1,11 @@
 # Pokemon-Web-Game
 
-************************************
+This is a Pokemon Battle Demo that was originally from a project by Scotty at fulltimeprogrammer.com
 
-README
+I have made some changes and improvements to the code, and am continuing to fix bugs and add more features.
 
-Pokemon Battle Demo
+### Usage
 
-This is an extension of the project
-by Scotty at fulltimeprogrammer.com
+1. Unzip the zip file.
+2. Open index.html in your browser.
 
-************************************
-
-Unzip the zip file.
-
-Open index.html in your browser.
-
-************************************
