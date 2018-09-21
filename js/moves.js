@@ -1,6 +1,6 @@
 // MOVES
 var moveList = [{
-    name: "Dig",
+    name: "Dig",  // 0
     type: ["Ground"],
     attDef: "Attack",
     status: null,
@@ -14,7 +14,7 @@ var moveList = [{
     pp: 10
 },
 {
-    name: "Slash",
+    name: "Slash",  // 1
     type: ["Normal"],
     attDef: "Attack",
     status: null,
@@ -22,13 +22,13 @@ var moveList = [{
     stageMod: null,
     secStatMod: null,
     secStageMod: null,
-    power: 70,          // hit crit percentage move
+    power: 70,          // high crit percentage move
     accuracy: 1,
     priority: 0,
     pp: 20
 },
 {
-    name: "Flamethrower",
+    name: "Flamethrower",  // 2
     type: ["Fire"],
     attDef: "Attack",
     status: null,
@@ -42,7 +42,7 @@ var moveList = [{
     pp: 15
 },
 {
-    name: "Mega Punch",
+    name: "Mega Punch",  // 3
     type: ["Normal"],
     attDef: "Attack",
     status: null,
@@ -57,7 +57,7 @@ var moveList = [{
     pp: 20
 },
 {
-    name: "Thunder Wave",
+    name: "Thunder Wave",  // 4
     type: ["Electric"],
     attDef: "Status",
     status: "PAR",
@@ -72,7 +72,7 @@ var moveList = [{
     pp: 20
 },
 {
-    name: "Quick Attack",
+    name: "Quick Attack",  // 5
     type: ["Normal"],
     attDef: "Attack",
     status: null,
@@ -87,7 +87,7 @@ var moveList = [{
     pp: 30
 },
 {
-    name: "Thunderbolt",
+    name: "Thunderbolt",  // 6
     type: ["Electric"],
     attDef: "Attack",
     status: null,
@@ -102,7 +102,7 @@ var moveList = [{
     pp: 15
 },
 {
-    name: "Thunder",
+    name: "Thunder",  // 7
     type: ["Electric"],
     attDef: "Attack",
     status: null,
@@ -117,7 +117,7 @@ var moveList = [{
     pp: 10
 },
 {
-    name: "Agility",
+    name: "Agility",  // 8
     type: ["Psychic"],
     attDef: "Status",
     status: null,
@@ -132,7 +132,7 @@ var moveList = [{
     pp: 30
 },
 {
-    name: "Bubblebeam",
+    name: "Bubblebeam",  // 9
     type: ["Water"],
     attDef: "Attack",
     status: null,
