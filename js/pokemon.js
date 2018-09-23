@@ -8,14 +8,18 @@ var charmander = {
     base_hp: 145,
     base_attack: 103,
     attack: 103,
+    attack_mod: 0,
     base_defense: 94,
     defense: 94,
+    defense_mod: 0,
     base_speed: 116,
     speed: 116,
+    speed_mod: 0,
     base_special: 101,
     special: 101,
+    special_mod: 0,
     effect: null,
-    moves: [moveList[0], moveList[1], moveList[2], moveList[3]]
+    moves: [moveList[0], moveList[1], moveList[2], moveList[10]]
 };
 
 var pikachu = {
@@ -27,12 +31,16 @@ var pikachu = {
     base_hp: 141,
     base_attack: 106,
     attack: 106,
+    attack_mod: 0,
     base_defense: 81,
     defense: 81,
+    defense_mod: 0,
     base_speed: 141,
     speed: 141,
+    speed_mod: 0,
     base_special: 101,
     special: 101,
+    special_mod: 0,
     effect: null,
     moves: [moveList[4], moveList[5], moveList[6], moveList[7]]
 };
