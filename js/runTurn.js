@@ -144,10 +144,14 @@ var cpuTurn =
             $("#attack-img").removeClass("cpu-attack-img");
 
             var status = "None";
-            if(Math.random() < foe.currentCpuMove.statusPerc && foe.currentCpuMove.status != null)
+            var r = Math.random();
+            if(r < foe.currentCpuMove.statusPerc && foe.currentCpuMove.status != null)
             {
                 status = foe.currentCpuMove.status;
             }
+            
+
+
             if(status.localeCompare("PAR") == 0)
             {
                 userPokemon.effect = "PAR";
@@ -156,8 +160,10 @@ var cpuTurn =
                 $("#chat-text").text(userPokemon.name + " is paralyzed. It may not attack.");
                 setTimeout(function() {
                     loop();
-                }, 1000);
+                }, 2000);
             }
+
+
             else
             {
                 loop();
@@ -315,9 +321,17 @@ var playerTurn =
             $("#attack-img").removeClass("user-attack-img");
 
             var status = "None";
-            if(Math.random() < user.currentUserMove.statusPerc && user.currentUserMove.status != null)
+            var r = Math.random();
+            if(r < user.currentUserMove.statusPerc && user.currentUserMove.status != null)
             {
                 status = user.currentUserMove.status;
+            }
+            else if(r < user.currentUserMove.accuracy)
+            {
+                if(user.currentUserMove.statMod.localeCompare("Attack") == 0)
+                {
+                    if()
+                }
             }
             if(status.localeCompare("PAR") == 0)
             {
