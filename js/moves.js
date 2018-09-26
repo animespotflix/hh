@@ -22,7 +22,7 @@ var moveList = [{
     stageMod: null,
     secStatMod: null,
     secStageMod: null,
-    power: 70,          // high crit percentage move
+    power: 0,          // high crit percentage move
     accuracy: 1,
     priority: 0,
     pp: 20
@@ -145,4 +145,19 @@ var moveList = [{
     accuracy: 1,
     priority: 0,
     pp: 20
+},
+{
+    name: "Swords Dance",  // 10
+    type: ["Normal"],
+    attDef: "Status",
+    status: null,
+    statusPerc: 0,
+    statMod: "Attack",
+    stageMod: 2,
+    secStatMod: null,
+    secStageMod: null,
+    power: 0,
+    accuracy: 1,
+    priority: 0,
+    pp: 30
 }];
