@@ -3,20 +3,20 @@
 // paralyzed pokemon have 25% of not being able to attack and speed is reduced by 75%
 
 
-var cpuTurn = 
+var cpuTurn =
 {
     currentCpuMove: null,
-    play: function() 
+    play: function()
     {
         //cpuPokemon.moves[randomMove].pp--;
 
-        var setUpCPUField = function() 
+        var setUpCPUField = function()
         {
             $("#chat-text").text("What will " + cpuPokemon.name + " do?");
             setTimeout(prepareToAttack, 1000);
         };
 
-        var prepareToAttack = function() 
+        var prepareToAttack = function()
         {
             $("#cpuPoke-img").stop();
             $("#cpuPoke-img").animate({
@@ -31,17 +31,17 @@ var cpuTurn =
             getAccuracy();
         };
 
-        var getAccuracy = function() 
+        var getAccuracy = function()
         {
             var setAccuracy = Math.random();
 
-            if(setAccuracy < foe.currentCpuMove.accuracy) 
+            if(setAccuracy < foe.currentCpuMove.accuracy)
             {
                 $("#chat-text").text(cpuPokemon.name + " used " + foe.currentCpuMove.name + "!");
                 getMoveType();
             }
 
-            else 
+            else
             {
                 $("#chat-text").text(cpuPokemon.name + " used " + foe.currentCpuMove.name + ".\n" + cpuPokemon.name + "'s attack missed!");
                 //currentState = user;
@@ -49,34 +49,34 @@ var cpuTurn =
             }
         };
 
-        var getMoveType = function() 
+        var getMoveType = function()
         {
             showMoveAnimation();
 
-            if(foe.currentCpuMove.attDef == "Attack") 
+            if(foe.currentCpuMove.attDef == "Attack")
             {
                 setTimeout(attackingMove, 1500);
             }
 
-            else 
+            else
             {
                 setTimeout(defensiveMove, 1500);
             }
         };
 
-        var showMoveAnimation = function() 
+        var showMoveAnimation = function()
         {
             $("#attack-img").addClass("cpu-attack-img");
             $("#attack-img").removeClass("hide");
             //$("#attack-img").
             //fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100);
-            for(i = 0; i < 4; i++) 
+            for(i = 0; i < 4; i++)
             {
                 $("#attack-img").fadeIn(100).fadeOut(100);
             }
         };
 
-        var attackingMove = function() 
+        var attackingMove = function()
         {
             $("#attack-img").addClass("hide");
             $("#attack-img").removeClass("cpu-attack-img");
@@ -88,7 +88,7 @@ var cpuTurn =
 
             // 25% of fully paralyzed
             if(cpuPokemon.effect != null && cpuPokemon.effect.localeCompare("PAR") == 0 && Math.random() < 0.25)
-            {   
+            {
                 $("#chat-text").text(cpuPokemon.name + " is fully paralyzed.");
                 console.log("Fully paralyzed");
             }
@@ -104,7 +104,7 @@ var cpuTurn =
                     critPerc = cpuPokemon.speed / 64;
                 }
 
-                if(rand < critPerc) 
+                if(rand < critPerc)
                 {
                     crit = 2;
                 }
@@ -112,14 +112,14 @@ var cpuTurn =
                 damage = damageFormula(crit, cpuPokemon, foe.currentCpuMove, userPokemon);
                 userPokemon.hp -= damage;
 
-                if(crit == 2) 
+                if(crit == 2)
                 {
                     $("#chat-text").text("Critical hit!");
                     console.log("Crit!");
                 }
 
                 console.log(crit + " Pika gave: " + damage + " Charm hp: " + userPokemon.hp + ", pp: " + foe.currentCpuMove.pp);
-            } 
+            }
 
             if(userPokemon.hp < 0)
                 userPokemon.hp = 0;
@@ -127,18 +127,18 @@ var cpuTurn =
             $("#user-health-bar").css("width", userPokemon.hp/userPokemon.base_hp * 100 + "%");
             $("#user-hp").text(userPokemon.hp + " / " + userPokemon.base_hp);
 
-            if(crit == 2) 
+            if(crit == 2)
             {
                 setTimeout(loop, 1500);
             }
 
-            else 
+            else
             {
                 loop();
             }
         };
 
-        var defensiveMove = function() 
+        var defensiveMove = function()
         {
             $("#attack-img").addClass("hide");
             $("#attack-img").removeClass("cpu-attack-img");
@@ -149,7 +149,7 @@ var cpuTurn =
             {
                 status = foe.currentCpuMove.status;
             }
-            
+
 
 
             if(status.localeCompare("PAR") == 0)
@@ -174,25 +174,25 @@ var cpuTurn =
     }
 };
 
-var playerTurn = 
+var playerTurn =
 {
     currentUserMove: null,
-    play: function() 
+    play: function()
     {
-        var setUpUserField = function() 
+        var setUpUserField = function()
         {
             //var moveButtons = ["#move1-text", "#move2-text", "#move3-text", "#move4-text"];
 
             //$("#user-buttons").removeClass("hide");
             $("#chat-text").text("What will " + userPokemon.name + " do?");
 
-            /*for(var i = moveButtons.length - 1; i >= 0; i--) 
+            /*for(var i = moveButtons.length - 1; i >= 0; i--)
             {
                 $(moveButtons[i]).html(userPokemon.moves[i].name + "<br> (pp: " + userPokemon.moves[i].pp + ")");
             }*/
         };
 
-        var prepareToAttack = function() 
+        var prepareToAttack = function()
         {
             $("#user-buttons").addClass("hide");
             $("#userPoke-img").stop();
@@ -209,39 +209,39 @@ var playerTurn =
             getAccuracy();
         };
 
-        var getAccuracy = function() 
+        var getAccuracy = function()
         {
             var setAccuracy = Math.random();
 
-            if(setAccuracy < user.currentUserMove.accuracy) 
+            if(setAccuracy < user.currentUserMove.accuracy)
             {
                 $("#chat-text").text(userPokemon.name + " used " + user.currentUserMove.name + "!");
                 getMoveType();
             }
 
-            else 
+            else
             {
                 $("#chat-text").text(userPokemon.name + " used " + user.currentUserMove.name + ".\n" + userPokemon.name + "'s attack missed!");
                 setTimeout(loop, 1500);
             }
         };
 
-        var getMoveType = function () 
+        var getMoveType = function ()
         {
             showMoveAnimation();
 
-            if(user.currentUserMove.attDef == "Attack") 
+            if(user.currentUserMove.attDef.localeCompare("Attack") == 0)
             {
                 setTimeout(attackingMove, 1500);
             }
 
-            else 
+            else
             {
                 setTimeout(defensiveMove, 1500);
             }
         };
 
-        var showMoveAnimation = function() 
+        var showMoveAnimation = function()
         {
             $("#attack-img").addClass("user-attack-img");
             $("#attack-img").removeClass("hide");
@@ -252,7 +252,7 @@ var playerTurn =
             }
         };
 
-        var attackingMove = function() 
+        var attackingMove = function()
         {
             $("#attack-img").addClass("hide");
             $("#attack-img").removeClass("user-attack-img");
@@ -264,12 +264,12 @@ var playerTurn =
 
             // 25% of fully paralyzed
             if(userPokemon.effect != null && userPokemon.effect.localeCompare("PAR") == 0 && Math.random() < 0.25)
-            {   
+            {
                 $("#chat-text").text(userPokemon.name + " is fully paralyzed.");
                 console.log("Fully paralyzed");
             }
 
-            else 
+            else
             {
                 // High crit ratio: Crabhammer, Karate Chop, Razor Leaf, Slash
                 if(user.currentUserMove.name.localeCompare("Crabhammer") == 0 ||
@@ -281,15 +281,15 @@ var playerTurn =
                 }
 
 
-                if(rand < critPerc) 
+                if(rand < critPerc)
                 {
                     crit = 2;
                 }
-                
+
                 damage = damageFormula(crit, userPokemon, user.currentUserMove, cpuPokemon);
                 cpuPokemon.hp -= damage;
 
-                if(crit == 2) 
+                if(crit == 2)
                 {
                     $("#chat-text").text("Critical hit!");
                     console.log("Crit!");
@@ -297,7 +297,7 @@ var playerTurn =
 
                 console.log(crit + " Charm gave: " + damage + " Pika hp: " + cpuPokemon.hp + ", pp: " + user.currentUserMove.pp);
             }
-            
+
             if(cpuPokemon.hp < 0)
                 cpuPokemon.hp = 0;
 
@@ -305,7 +305,7 @@ var playerTurn =
             $("#cpu-hp").text(cpuPokemon.hp + " / " + cpuPokemon.base_hp);
             //currentState = foe;
 
-            if(crit == 2) 
+            if(crit == 2)
             {
                 setTimeout(loop, 1500);
             }
@@ -315,7 +315,7 @@ var playerTurn =
             }
         };
 
-        var defensiveMove = function() 
+        var defensiveMove = function()
         {
             $("#attack-img").addClass("hide");
             $("#attack-img").removeClass("user-attack-img");
@@ -330,7 +330,7 @@ var playerTurn =
             {
                 if(user.currentUserMove.statMod.localeCompare("Attack") == 0)
                 {
-                    if()
+                    //if()
                 }
             }
             if(status.localeCompare("PAR") == 0)
