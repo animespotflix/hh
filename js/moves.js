@@ -1,7 +1,7 @@
 // MOVES
 var moveList = [{
     name: "Dig",  // 0
-    type: ["Ground"],
+    type: ["Ground"],  // two turn move, only swift can damage while underground
     attDef: "Attack",
     status: null,
     statMod: null,
