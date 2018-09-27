@@ -18,6 +18,12 @@ var charmander = {
     base_special: 101,
     special: 101,
     special_mod: 0,
+    base_accuracy: 1,
+    accuracy: 1,
+    accuracy_mod: 0,
+    base_evasion: 0,
+    evasion: 0,
+    evasion_mod: 0,
     effect: null,
     moves: [moveList[0], moveList[1], moveList[2], moveList[10]]
 };
@@ -41,7 +47,12 @@ var pikachu = {
     base_special: 101,
     special: 101,
     special_mod: 0,
-    effect: null,
+    base_accuracy: 1,
+    accuracy: 1,
+    accuracy_mod: 0,
+    base_evasion: 0,
+    evasion: 0,
+    evasion_mod: 0,    effect: null,
     moves: [moveList[4], moveList[5], moveList[6], moveList[7]]
 };
 
