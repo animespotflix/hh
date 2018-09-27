@@ -35,7 +35,7 @@ var cpuTurn =
         {
             var setAccuracy = Math.random();
 
-            if(setAccuracy < foe.currentCpuMove.accuracy)
+            if(setAccuracy < foe.currentCpuMove.accuracy * foe.accuracy))
             {
                 $("#chat-text").text(cpuPokemon.name + " used " + foe.currentCpuMove.name + "!");
                 getMoveType();
@@ -213,7 +213,7 @@ var playerTurn =
         {
             var setAccuracy = Math.random();
 
-            if(setAccuracy < user.currentUserMove.accuracy)
+            if(setAccuracy < user.currentUserMove.accuracy * user.accuracy)
             {
                 $("#chat-text").text(userPokemon.name + " used " + user.currentUserMove.name + "!");
                 getMoveType();
