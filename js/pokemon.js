@@ -62,43 +62,33 @@ var stageMultiplier = function(poke, stat, stage)
 {
     var mod = 0;  // percentage of BASE stat
 
-    if(stage == 1)
-        mod = 1.5;
-    else if(stage == 2)
-        mod = 2;
-    else if(stage == 3)
-        mod = 2.5;
-    else if(stage == 4)
-        mod = 3;
-    else if(stage == 5)
-        mod = 3.5;
-    else if(stage == 6)
-        mod = 4;
-    else if(stage == -1)
-        mod = 0.667;
-    else if(stage == -2)
-        mod = 0.5;
-    else if(stage == -3)
-        mod = 0.4;
-    else if(stage == -4)
-        mod = 0.333;
-    else if(stage == -5)
-        mod = 0.28;
-    else if(stage == -6)
-        mod = 0.25;
+    var modPerc = [[-6, 0.25], [-5, 0.28], [-4, 0.333], [-3, 0.4], [-2, 0.5], [-1, 0.667],
+            [0, 1], [1, 1.5], [2, 2], [3, 2.5], [4, 3], [5, 3.5], [6, 4]];
 
     if(stat.localeCompare("Attack") == 0)
+    {
+
         poke.attack = poke.base_attack * mod;
+    }
 
     else if(stat.localeCompare("Defense") == 0)
+    {
         poke.defense = poke.base_defense * mod;
+    }
 
     else if(stat.localeCompare("Special") == 0)
+    {
         poke.special = poke.base_special * mod;
+    }
 
     else if(stat.localeCompare("Speed") == 0)
+    {
         poke.speed = poke.base_speed * mod;
+    }
 
-    //else if(stat.localeCompare("Accuracy") == 0)
-    //    poke.accuracy = poke.base_accuracy * mod;
+    else if(stat.localeCompare("Accuracy") == 0)
+    {
+        poke.accuracy = poke.base_accuracy * mod;
+    }
+
 }
