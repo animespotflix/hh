@@ -67,28 +67,41 @@ var stageMultiplier = function(poke, stat, stage)
 
     if(stat.localeCompare("Attack") == 0)
     {
-
-        poke.attack = poke.base_attack * mod;
+        poke.attack_mod = limitStage(poke.attack_mod + stage);
+        poke.attack = poke.base_attack * poke.attack_mod;
     }
 
     else if(stat.localeCompare("Defense") == 0)
     {
-        poke.defense = poke.base_defense * mod;
+        poke.defense_mod = limitStage(poke.defense_mod + stage);
+        poke.defense = poke.base_defense * poke.defense_mod;
     }
 
     else if(stat.localeCompare("Special") == 0)
     {
-        poke.special = poke.base_special * mod;
+        poke.special_mod = limitStage(poke.special_mod + stage);
+        poke.special = poke.base_special * poke.special_mod;
     }
 
     else if(stat.localeCompare("Speed") == 0)
     {
-        poke.speed = poke.base_speed * mod;
+        poke.speed_mod = limitStage(poke.speed_mod + stage);
+        poke.speed = poke.base_speed * poke.speed_mod;
     }
 
     else if(stat.localeCompare("Accuracy") == 0)
     {
-        poke.accuracy = poke.base_accuracy * mod;
+        poke.accuracy_mod = limitStage(poke.accuracy_mod + stage);
+        poke.accuracy = poke.base_accuracy * poke.accuracy_mod;
     }
+}
 
+var limitStage = function(stage)
+{
+    if(stage < -6)
+        return -6;
+    if(stage > 6)
+        return 6;
+
+    return stage;
 }
