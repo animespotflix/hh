@@ -47,7 +47,47 @@ var pikachu = {
 
 // stat multipliers (stages), accuracy, evasion
 // 25/100	28/100	33/100	40/100	50/100	66/100	100/100	150/100	200/100	250/100	300/100	350/100	400/100
-var stageMultiplier = function()
+var stageMultiplier = function(poke, stat, stage)
 {
+    var mod = 0;  // percentage of BASE stat
 
+    if(stage == 1)
+        mod = 1.5;
+    else if(stage == 2)
+        mod = 2;
+    else if(stage == 3)
+        mod = 2.5;
+    else if(stage == 4)
+        mod = 3;
+    else if(stage == 5)
+        mod = 3.5;
+    else if(stage == 6)
+        mod = 4;
+    else if(stage == -1)
+        mod = 0.667;
+    else if(stage == -2)
+        mod = 0.5;
+    else if(stage == -3)
+        mod = 0.4;
+    else if(stage == -4)
+        mod = 0.333;
+    else if(stage == -5)
+        mod = 0.28;
+    else if(stage == -6)
+        mod = 0.25;
+
+    if(stat.localeCompare("Attack") == 0)
+        poke.attack = poke.base_attack * mod;
+
+    else if(stat.localeCompare("Defense") == 0)
+        poke.defense = poke.base_defense * mod;
+
+    else if(stat.localeCompare("Special") == 0)
+        poke.special = poke.base_special * mod;
+
+    else if(stat.localeCompare("Speed") == 0)
+        poke.speed = poke.base_speed * mod;
+
+    //else if(stat.localeCompare("Accuracy") == 0)
+    //    poke.accuracy = poke.base_accuracy * mod;
 }
